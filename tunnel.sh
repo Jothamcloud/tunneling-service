@@ -1,22 +1,32 @@
 #!/bin/bash
 
-# Usage: ./tunnel.sh <local_port> <server>
+# Usage: ./tunnel.sh <local_port>
 
 LOCAL_PORT=$1
-SERVER=$2
+SERVER=52.90.23.87
 USER=newuser
 PASSWORD=jotham
 
-if [ -z "$LOCAL_PORT" ] || [ -z "$SERVER" ]; then
-    echo "Usage: $0 <local_port> <server>"
+if [ -z "$LOCAL_PORT" ]; then
+    echo "Usage: $0 <local_port>"
     exit 1
 fi
+
+# Function to stop existing SSH tunnels
+stop_tunnel() {
+    echo "Stopping existing SSH tunnels..."
+    pkill -f "ssh -R"
+    echo "Existing SSH tunnels stopped."
+}
+
+# Stop existing tunnels before starting a new one
+stop_tunnel
 
 # Generate a random remote port
 REMOTE_PORT=$(shuf -i 20000-65000 -n 1)
 
 # Establish SSH reverse tunnel and handle errors
-echo "Establishing SSH tunnel from local port $LOCAL_PORT to remote port $REMOTE_PORT on server $SERVER..."
+echo "Establishing new SSH tunnel..."
 sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no -R $REMOTE_PORT:localhost:$LOCAL_PORT $USER@$SERVER -N &
 SSH_PID=$!
 
