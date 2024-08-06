@@ -6,6 +6,7 @@ LOCAL_PORT=$1
 SERVER=52.90.23.87
 USER=newuser
 PASSWORD=jotham
+SUBDOMAIN=$(head /dev/urandom | tr -dc a-z0-9 | head -c 8)
 
 if [ -z "$LOCAL_PORT" ]; then
     echo "Usage: $0 <local_port>"
@@ -34,7 +35,7 @@ sleep 2
 
 if ps -p $SSH_PID > /dev/null; then
     echo "SSH tunnel established successfully."
-    echo "Your application is accessible at http://new.ajotham.link:$REMOTE_PORT"
+    echo "Your application is accessible at http://$SUBDOMAIN.new.ajotham.link:$REMOTE_PORT"
 else
     echo "Failed to establish SSH tunnel."
     exit 1
