@@ -3,7 +3,7 @@
 # Usage: ./tunnel.sh <local_port>
 
 LOCAL_PORT=$1
-SERVER=52.90.23.87
+SERVER=54.173.79.111
 USER=newuser
 PASSWORD=jotham
 SUBDOMAIN=$(head /dev/urandom | tr -dc a-z0-9 | head -c 8)
